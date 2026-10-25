@@ -1,0 +1,295 @@
+:root {
+  --bg: #0a0a0a;
+  --bg-2: #141414;
+  --bg-3: #1d1d1d;
+  --text: #f2f2f2;
+  --muted: #f2f2f2;
+  --accent: #1ed760;
+  --accent-2: #17b34d;
+  --radius: 14px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  background: radial-gradient(circle at top left, #12241a 0%, var(--bg) 40%) fixed;
+  color: var(--text);
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding-bottom: 100px;
+  min-height: 100vh;
+}
+
+/* =========================================
+   Sidebar
+   ========================================= */
+.sidebar {
+  position: fixed; top: 0; left: 0; bottom: 90px; width: 240px;
+  background: rgba(20, 20, 20, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 20px 12px; z-index: 100;
+  transition: transform .3s ease;
+  overflow-y: auto;
+}
+
+.brand {
+  font-size: 1.4rem; font-weight: 800; letter-spacing: .5px;
+  padding: 8px 12px 20px;
+  background: linear-gradient(90deg, var(--accent), #7af8a4);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+
+.sidebar .nav-link {
+  color: var(--muted); border-radius: 10px; padding: 10px 14px;
+  margin-bottom: 4px; font-weight: 500;
+  transition: all .2s ease; cursor: pointer; display: block; text-decoration: none;
+}
+
+.sidebar .nav-link:hover { background: rgba(255, 255, 255, 0.05); color: var(--text); }
+.sidebar .nav-link.active { background: rgba(30, 215, 96, 0.15); color: var(--accent); }
+.sidebar .nav-link i { margin-right: 10px; width: 18px; }
+
+/* =========================================
+   Main Content & Topbar
+   ========================================= */
+.main-content { margin-left: 240px; padding: 20px 30px; }
+
+.topbar {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 26px;
+  position: relative;
+}
+
+.search-wrap { flex: 1; position: relative; }
+
+.search-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text); border-radius: 30px; padding: 12px 20px;
+  transition: all .2s;
+  width: 100%;
+}
+
+.search-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(30, 215, 96, 0.12);
+  color: var(--text);
+  outline: none;
+}
+
+/* =========================================
+   Easter Egg
+   ========================================= */
+.easter-egg {
+  position: absolute; top: 58px; left: 0;
+  background: linear-gradient(135deg, #1ed760, #17b34d);
+  color: #04220f; font-weight: 700; padding: 10px 18px;
+  border-radius: 30px; opacity: 0; transform: translateY(-10px) scale(.9);
+  pointer-events: none; transition: all .35s cubic-bezier(.34, 1.56, .64, 1);
+  box-shadow: 0 8px 30px rgba(30, 215, 96, 0.45); z-index: 10; font-size: .95rem;
+}
+
+.easter-egg.show { opacity: 1; transform: translateY(0) scale(1); }
+.easter-egg.chill { background: linear-gradient(135deg, #6ec6ff, #4a9eff); color: #04213d; box-shadow: 0 8px 30px rgba(110, 198, 255, 0.4); }
+
+/* =========================================
+   Sections & Grid
+   ========================================= */
+.section-title { font-weight: 800; font-size: 1.5rem; margin: 32px 0 18px; }
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 18px;
+}
+
+/* =========================================
+   Music Cards (Songs, Artists, Albums)
+   ========================================= */
+.music-card {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius); padding: 16px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  cursor: pointer; position: relative; overflow: hidden;
+  
+  /* Fixes flickering */
+  transform: translateZ(0);
+  contain: layout paint;
+}
+
+.music-card:hover {
+  transform: translateY(-6px);
+  background: linear-gradient(180deg, rgba(30, 215, 96, 0.1), rgba(255, 255, 255, 0.02));
+  border-color: rgba(30, 215, 96, 0.3);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Image Fixes (No glittering) */
+.music-card img {
+  width: 100%; aspect-ratio: 1; object-fit: cover;
+  border-radius: 10px; margin-bottom: 12px; 
+  background-color: #222;
+  transition: transform 0.4s ease;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.music-card:hover img {
+  transform: scale(1.03); /* Subtle zoom instead of repaint */
+}
+
+.music-card .title {
+  font-weight: 700; font-size: 1rem; white-space: nowrap;
+  overflow: hidden; text-overflow: ellipsis;
+}
+
+.music-card .subtitle { color: var(--muted); font-size: .85rem; }
+
+/* Play Button inside Card */
+.card-play {
+  position: absolute; right: 20px; bottom: 90px;
+  width: 46px; height: 46px; border-radius: 50%;
+  background: var(--accent); color: #000; border: none;
+  font-size: 1.4rem; opacity: 0; transform: translateY(8px);
+  transition: all .25s ease; box-shadow: 0 8px 20px rgba(30, 215, 96, 0.4);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.music-card:hover .card-play { opacity: 1; transform: translateY(0); }
+
+/* =========================================
+   Buttons
+   ========================================= */
+.btn-accent {
+  background: var(--accent); color: #000; border: none; font-weight: 700;
+  border-radius: 30px; padding: 10px 24px; transition: all .2s;
+}
+
+.btn-accent:hover { background: #17b34d; color: #000; transform: scale(1.03); }
+
+.btn-icon {
+  background: transparent; border: none; color: var(--muted);
+  font-size: 1.1rem; padding: 6px; border-radius: 50%;
+  transition: color .2s;
+}
+
+.btn-icon:hover { color: var(--text); }
+.btn-icon.active { color: var(--accent); }
+
+/* =========================================
+   Fixed Bottom Player
+   ========================================= */
+.player {
+  position: fixed; left: 0; right: 0; bottom: 0; height: 90px;
+  background: rgba(15, 15, 15, 0.92); backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center;
+  padding: 0 20px; gap: 20px; z-index: 200;
+}
+
+.player-left { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+.player-left img { 
+  width: 56px; height: 56px; border-radius: 8px; object-fit: cover; 
+  background: #222;
+  transform: translateZ(0);
+}
+.player-title { font-weight: 600; font-size: .9rem; }
+.player-artist { color: var(--muted); font-size: .8rem; }
+
+.player-center { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.player-controls { display: flex; align-items: center; gap: 10px; }
+
+.btn-play {
+  width: 42px; height: 42px; border-radius: 50%; border: none;
+  background: var(--accent); color: #000; font-size: 1.4rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .15s;
+}
+
+.btn-play:hover { transform: scale(1.08); }
+
+.progress-row {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  font-size: .72rem; color: var(--muted);
+}
+
+.progress-row input { flex: 1; accent-color: var(--accent); }
+.player-right { display: flex; align-items: center; gap: 12px; justify-content: flex-end; }
+.player-right input[type="range"] { width: 90px; accent-color: var(--accent); }
+
+/* =========================================
+   Forms & Glass Cards
+   ========================================= */
+.form-control, .form-select {
+  background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text); border-radius: 10px;
+}
+
+.form-control:focus, .form-select:focus {
+  background: rgba(255, 255, 255, 0.08); border-color: var(--accent);
+  color: var(--text); box-shadow: 0 0 0 4px rgba(30, 215, 96, 0.12);
+  outline: none;
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius); 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 24px;
+}
+
+/* =========================================
+   Admin Upload Zone
+   ========================================= */
+.upload-zone {
+  border: 2px dashed rgba(30, 215, 96, 0.4); border-radius: var(--radius);
+  padding: 30px; text-align: center; background: rgba(30, 215, 96, 0.03);
+  transition: all .2s; cursor: pointer;
+}
+
+.upload-zone:hover { background: rgba(30, 215, 96, 0.08); border-color: var(--accent); }
+.upload-zone input { display: none; }
+.upload-zone i { font-size: 2rem; color: var(--accent); }
+
+/* =========================================
+   Responsive Design
+   ========================================= */
+@media (max-width: 900px) {
+  .sidebar { transform: translateX(-100%); }
+  .sidebar.open { transform: translateX(0); }
+  
+  .main-content { margin-left: 0; padding: 16px; }
+  
+  .player { 
+    grid-template-columns: 1fr 1fr; 
+    height: auto; 
+    padding: 10px 16px; 
+    gap: 8px; 
+  }
+  
+  .player-center { order: 3; grid-column: 1 / -1; }
+  .player-right { display: none; }
+  
+  .card-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+}
+/* Force search bar text and placeholder to be white */
+input[type="text"], 
+input[type="search"], 
+.form-control {
+  color: #ffffff !important;
+}
+
+.form-control::placeholder {
+  color: #cccccc !important; /* Makes the "Search..." hint text light gray/white */
+}
+
+#globalSearch, #searchPageInput {
+  color: #ffffff !important;
+}
