@@ -22,7 +22,10 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage });
+const upload = multer({ 
+  storage,
+  limits: { fileSize: 50 * 1024 * 1024 } // Allows files up to 50MB
+});
 
 // 3. Upload Route
 router.post('/', requireAdmin, upload.fields([{ name: 'audio', maxCount: 1 }, { name: 'cover', maxCount: 1 }]), async (req, res, next) => {
@@ -38,8 +41,8 @@ router.post('/', requireAdmin, upload.fields([{ name: 'audio', maxCount: 1 }, { 
       coverImage: req.files?.cover ? req.files.cover[0].path : '/images/default-cover.png'
     });
     res.status(201).json(song);
-  } catch (err) { 
-    console.error(err);
+    } catch (err) { 
+    console.error("UPLOAD ERROR:", err); // This prints the exact error to Render logs
     res.status(500).json({ error: err.message }); 
   }
 });
