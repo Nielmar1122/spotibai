@@ -95,14 +95,14 @@ document.addEventListener('DOMContentLoaded', () => {
 function songCard(s) {
   const fav = state.favorites.has(String(s._id));
   
-  // If the user uploaded a cover, use it. Otherwise, use a placeholder.
-  const cover = (s.coverImage && s.coverImage !== '/images/default-cover.png') 
+  // Use the uploaded cover. If it's missing or broken, use a green placeholder.
+  const cover = (s.coverImage && s.coverImage.startsWith('http')) 
     ? s.coverImage 
     : `https://placehold.co/400x400/181818/1ed760?text=${encodeURIComponent(s.title.substring(0, 2))}`;
 
   return `
     <div class="music-card" data-song-id="${s._id}">
-      <img src="${cover}" alt="${s.title}" onerror="this.src='https://placehold.co/400x400/181818/1ed760?text=Error'">
+      <img src="${cover}" alt="${s.title}" onerror="this.src='https://placehold.co/400x400/181818/1ed760?text=${encodeURIComponent(s.title.substring(0, 2))}'">
       <div class="title">${s.title}</div>
       <div class="subtitle">${s.artist}</div>
       <div class="d-flex justify-content-between align-items-center mt-2">
