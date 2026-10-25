@@ -42,7 +42,7 @@ router.post('/', requireAdmin, upload.fields([{ name: 'audio', maxCount: 1 }, { 
     });
     res.status(201).json(song);
     } catch (err) { 
-    console.error("UPLOAD ERROR:", err); // This prints the exact error to Render logs
+    console.error("UPLOAD ERROR:", err.message || JSON.stringify(err));
     res.status(500).json({ error: err.message }); 
   }
 });
